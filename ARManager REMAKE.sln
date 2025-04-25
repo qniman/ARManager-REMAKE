@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARManager REMAKE", "ARManager REMAKE\ARManager REMAKE.csproj", "{4BE01DEE-8380-4719-B561-AEE7BBEEA1FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4BE01DEE-8380-4719-B561-AEE7BBEEA1FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BE01DEE-8380-4719-B561-AEE7BBEEA1FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BE01DEE-8380-4719-B561-AEE7BBEEA1FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BE01DEE-8380-4719-B561-AEE7BBEEA1FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F2CE5D00-A581-4B08-82E1-A0DC9178BCD3}
+	EndGlobalSection
+EndGlobal
