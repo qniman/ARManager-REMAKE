@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ARManager_REMAKE.Classes.Database.Models
+﻿namespace ARManager_REMAKE.Classes.Database.Models
 {
     public class OrderDetails
     {
