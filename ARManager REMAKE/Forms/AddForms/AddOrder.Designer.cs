@@ -45,8 +45,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.deviceTypeComboBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.completionDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.servicesTotalCostLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -54,6 +52,8 @@
             this.selectServicesButton = new System.Windows.Forms.Button();
             this.servicesDataGrid = new System.Windows.Forms.DataGridView();
             this.confirmButton = new System.Windows.Forms.Button();
+            this.statusComboBox = new System.Windows.Forms.ComboBox();
+            this.statusLabel = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -158,12 +158,10 @@
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.deviceTypeComboBox);
             this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Controls.Add(this.completionDateTimePicker);
             this.groupBox3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox3.Location = new System.Drawing.Point(12, 88);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(365, 364);
+            this.groupBox3.Size = new System.Drawing.Size(365, 354);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Информация";
@@ -175,7 +173,7 @@
             this.problemDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.problemDescriptionTextBox.Location = new System.Drawing.Point(6, 215);
             this.problemDescriptionTextBox.Name = "problemDescriptionTextBox";
-            this.problemDescriptionTextBox.Size = new System.Drawing.Size(353, 87);
+            this.problemDescriptionTextBox.Size = new System.Drawing.Size(353, 133);
             this.problemDescriptionTextBox.TabIndex = 13;
             this.problemDescriptionTextBox.Text = "";
             // 
@@ -247,25 +245,6 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Тип устройства";
             // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label2.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(2, 305);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(357, 23);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Дата выполнения";
-            // 
-            // completionDateTimePicker
-            // 
-            this.completionDateTimePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.completionDateTimePicker.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.completionDateTimePicker.Location = new System.Drawing.Point(6, 331);
-            this.completionDateTimePicker.Name = "completionDateTimePicker";
-            this.completionDateTimePicker.Size = new System.Drawing.Size(353, 27);
-            this.completionDateTimePicker.TabIndex = 4;
-            // 
             // groupBox4
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -279,7 +258,7 @@
             this.groupBox4.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox4.Location = new System.Drawing.Point(383, 88);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(415, 364);
+            this.groupBox4.Size = new System.Drawing.Size(415, 354);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Услуги";
@@ -289,7 +268,7 @@
             this.servicesTotalCostLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.servicesTotalCostLabel.Font = new System.Drawing.Font("Century Gothic", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.servicesTotalCostLabel.Location = new System.Drawing.Point(191, 276);
+            this.servicesTotalCostLabel.Location = new System.Drawing.Point(191, 266);
             this.servicesTotalCostLabel.Name = "servicesTotalCostLabel";
             this.servicesTotalCostLabel.Size = new System.Drawing.Size(218, 23);
             this.servicesTotalCostLabel.TabIndex = 4;
@@ -301,7 +280,7 @@
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(6, 276);
+            this.label6.Location = new System.Drawing.Point(6, 266);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(139, 20);
             this.label6.TabIndex = 3;
@@ -313,7 +292,7 @@
             this.clearServicesButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clearServicesButton.Font = new System.Drawing.Font("Century Gothic", 9.969231F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.clearServicesButton.Location = new System.Drawing.Point(5, 332);
+            this.clearServicesButton.Location = new System.Drawing.Point(5, 322);
             this.clearServicesButton.Margin = new System.Windows.Forms.Padding(2);
             this.clearServicesButton.Name = "clearServicesButton";
             this.clearServicesButton.Size = new System.Drawing.Size(404, 27);
@@ -326,7 +305,7 @@
             this.selectServicesButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.selectServicesButton.Font = new System.Drawing.Font("Century Gothic", 9.969231F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.selectServicesButton.Location = new System.Drawing.Point(5, 301);
+            this.selectServicesButton.Location = new System.Drawing.Point(5, 291);
             this.selectServicesButton.Margin = new System.Windows.Forms.Padding(2);
             this.selectServicesButton.Name = "selectServicesButton";
             this.selectServicesButton.Size = new System.Drawing.Size(405, 27);
@@ -356,14 +335,14 @@
             this.servicesDataGrid.RowTemplate.Height = 24;
             this.servicesDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.servicesDataGrid.ShowEditingIcon = false;
-            this.servicesDataGrid.Size = new System.Drawing.Size(405, 253);
+            this.servicesDataGrid.Size = new System.Drawing.Size(405, 243);
             this.servicesDataGrid.TabIndex = 1;
             // 
             // confirmButton
             // 
             this.confirmButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.confirmButton.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.confirmButton.Location = new System.Drawing.Point(664, 458);
+            this.confirmButton.Location = new System.Drawing.Point(664, 452);
             this.confirmButton.Name = "confirmButton";
             this.confirmButton.Size = new System.Drawing.Size(134, 36);
             this.confirmButton.TabIndex = 3;
@@ -371,11 +350,37 @@
             this.confirmButton.UseVisualStyleBackColor = true;
             this.confirmButton.Click += new System.EventHandler(this.saveOrderButton_Click);
             // 
+            // statusComboBox
+            // 
+            this.statusComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.statusComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.statusComboBox.Enabled = false;
+            this.statusComboBox.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.statusComboBox.FormattingEnabled = true;
+            this.statusComboBox.Location = new System.Drawing.Point(137, 455);
+            this.statusComboBox.Name = "statusComboBox";
+            this.statusComboBox.Size = new System.Drawing.Size(240, 29);
+            this.statusComboBox.TabIndex = 14;
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.statusLabel.AutoSize = true;
+            this.statusLabel.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.statusLabel.Location = new System.Drawing.Point(8, 458);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(123, 21);
+            this.statusLabel.TabIndex = 15;
+            this.statusLabel.Text = "Статус заказа";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // AddOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(810, 506);
+            this.ClientSize = new System.Drawing.Size(810, 496);
+            this.Controls.Add(this.statusComboBox);
+            this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.confirmButton);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -394,6 +399,7 @@
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.servicesDataGrid)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -407,8 +413,6 @@
         private System.Windows.Forms.Label employeePositionLabel;
         private System.Windows.Forms.Label employeeNameLabel;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DateTimePicker completionDateTimePicker;
         private System.Windows.Forms.ComboBox deviceTypeComboBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox deviceModelTextBox;
@@ -424,5 +428,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label servicesTotalCostLabel;
         private System.Windows.Forms.Button confirmButton;
+        private System.Windows.Forms.Label statusLabel;
+        private System.Windows.Forms.ComboBox statusComboBox;
     }
 }

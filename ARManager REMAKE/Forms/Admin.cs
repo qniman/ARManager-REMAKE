@@ -1,6 +1,7 @@
 ﻿using ARManager_REMAKE.Classes.Database;
 using ARManager_REMAKE.Classes.Database.Models;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -235,6 +236,57 @@ namespace ARManager_REMAKE.Forms
             {
                 db.DeleteEmployee(employeeId);
                 LoadData();
+            }
+        }
+
+        private void importButton_Click(object sender, EventArgs e)
+        {
+            using (var openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "JSON файлы (*.json)|*.json|Все файлы (*.*)|*.*";
+                openFileDialog.Title = "Выберите JSON файл для импорта";
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        db.ImportFromJson(openFileDialog.FileName);
+                        MessageBox.Show("База данных успешно импортирована из JSON. Текущая сессия будет закрыта.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Перезапуск приложения
+                        System.Diagnostics.Process.Start(Application.ExecutablePath);
+                        Application.Exit();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при импорте: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void exportButton_Click(object sender, EventArgs e)
+        {
+            using (var saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "JSON файлы (*.json)|*.json|Все файлы (*.*)|*.*";
+                saveFileDialog.Title = "Сохранить базу данных как JSON";
+                saveFileDialog.FileName = $"database_export_{DateTime.Now:yyyyMMdd_HHmmss}.json";
+                saveFileDialog.RestoreDirectory = true;
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        db.ExportToJson(saveFileDialog.FileName);
+                        MessageBox.Show("База данных успешно экспортирована в JSON.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при экспорте: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
     }

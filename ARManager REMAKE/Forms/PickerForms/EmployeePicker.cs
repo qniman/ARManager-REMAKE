@@ -53,7 +53,7 @@ namespace ARManager_REMAKE.Forms.PickerForms
             LoadEmployees();
         }
 
-        private void confirmButton_Click(object sender, EventArgs e)
+        void SelectEmployee()
         {
             if (employeesDataGrid.SelectedRows.Count == 0)
             {
@@ -63,6 +63,11 @@ namespace ARManager_REMAKE.Forms.PickerForms
             int employeeId = (int)employeesDataGrid.SelectedRows[0].Cells["Id"].Value;
             selectedEmployee = db.GetEmployeeById(employeeId);
             Close();
+        }
+
+        private void confirmButton_Click(object sender, EventArgs e)
+        {
+            SelectEmployee();
         }
 
         private void addEmployeeButton_Click(object sender, EventArgs e)
@@ -92,6 +97,11 @@ namespace ARManager_REMAKE.Forms.PickerForms
 
                 LoadEmployees(filteredCustomers);
             }
+        }
+
+        private void employeesDataGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SelectEmployee();
         }
     }
 }

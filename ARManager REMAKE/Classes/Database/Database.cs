@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using ARManager_REMAKE.Classes.Database.Models;
 using ARManager_REMAKE.Forms.PickerForms;
+using Newtonsoft.Json;
 
 namespace ARManager_REMAKE.Classes.Database
 {
@@ -328,6 +330,59 @@ namespace ARManager_REMAKE.Classes.Database
                 }
             }
             return orderDetails;
+        }
+
+        public List<string> GetOrderStatuses()
+        {
+            var statuses = new List<string>();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string query = "SELECT DISTINCT Status FROM Orders";
+                using (var command = new SQLiteCommand(query, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            statuses.Add(reader.GetString(0));
+                        }
+                    }
+                }
+            }
+            return statuses;
+        }
+
+        public List<OrderItem> GetOrderItems(int orderId)
+        {
+            var items = new List<OrderItem>();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string query = @"
+            SELECT od.OrderId, s.Name, od.Quantity, s.Price
+            FROM OrderDetails od
+            JOIN Services s ON od.ServiceId = s.Id
+            WHERE od.OrderId = @OrderId";
+                using (var command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@OrderId", orderId);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            items.Add(new OrderItem
+                            {
+                                OrderId = reader.GetInt32(0),
+                                Name = reader.GetString(1),
+                                Quantity = reader.GetInt32(2),
+                                Price = reader.GetInt32(3)
+                            });
+                        }
+                    }
+                }
+            }
+            return items;
         }
 
         public List<Customer> GetCustomers()
@@ -710,6 +765,240 @@ namespace ARManager_REMAKE.Classes.Database
                 using (var command = new SQLiteCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", employeeId);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public class DatabaseData
+        {
+            public List<Customer> Customers { get; set; }
+            public List<Employee> Employees { get; set; }
+            public List<Service> Services { get; set; }
+            public List<Order> Orders { get; set; }
+            public List<OrderDetails> OrderDetails { get; set; }
+        }
+
+        public void ExportToJson(string filePath)
+        {
+            try
+            {
+                var data = new DatabaseData
+                {
+                    Customers = GetCustomers(),
+                    Employees = GetEmployees(),
+                    Services = GetServices(),
+                    Orders = GetOrders(null),
+                    OrderDetails = GetAllOrderDetails()
+                };
+
+                string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+                File.WriteAllText(filePath, json);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при экспорте базы данных в JSON: {ex.Message}");
+            }
+        }
+
+        public void ImportFromJson(string filePath)
+        {
+            try
+            {
+                if (!File.Exists(filePath))
+                {
+                    throw new Exception("Указанный файл не существует.");
+                }
+
+                string json = File.ReadAllText(filePath);
+                var data = JsonConvert.DeserializeObject<DatabaseData>(json);
+
+                if (data == null)
+                {
+                    throw new Exception("Ошибка при десериализации JSON.");
+                }
+
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            ClearTables(connection, transaction);
+
+                            ImportCustomers(data.Customers, connection, transaction);
+                            ImportEmployees(data.Employees, connection, transaction);
+                            ImportServices(data.Services, connection, transaction);
+                            ImportOrders(data.Orders, connection, transaction);
+                            ImportOrderDetails(data.OrderDetails, connection, transaction);
+
+                            transaction.Commit();
+                        }
+                        catch
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при импорте базы данных из JSON: {ex.Message}");
+            }
+        }
+
+        private List<OrderDetails> GetAllOrderDetails()
+        {
+            var orderDetails = new List<OrderDetails>();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string query = "SELECT Id, OrderId, ServiceId, Quantity, TotalCost FROM OrderDetails";
+                using (var command = new SQLiteCommand(query, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            orderDetails.Add(new OrderDetails
+                            {
+                                Id = reader.GetInt32(0),
+                                OrderId = reader.GetInt32(1),
+                                ServiceId = reader.GetInt32(2),
+                                Quantity = reader.GetInt32(3),
+                                TotalCost = reader.GetInt32(4)
+                            });
+                        }
+                    }
+                }
+            }
+            return orderDetails;
+        }
+
+        private void ClearTables(SQLiteConnection connection, SQLiteTransaction transaction)
+        {
+            string[] tables = { "OrderDetails", "Orders", "Services", "Customers", "Employees" };
+            foreach (var table in tables)
+            {
+                string query = $"DELETE FROM {table}";
+                using (var command = new SQLiteCommand(query, connection, transaction))
+                {
+                    command.ExecuteNonQuery();
+                }
+                string resetQuery = $"DELETE FROM sqlite_sequence WHERE name = '{table}'";
+                using (var command = new SQLiteCommand(resetQuery, connection, transaction))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void ImportCustomers(List<Customer> customers, SQLiteConnection connection, SQLiteTransaction transaction)
+        {
+            if (customers == null) return;
+            foreach (var customer in customers)
+            {
+                string query = @"
+                    INSERT INTO Customers (Id, FirstName, LastName, ContactNumber, Email, Address)
+                    VALUES (@Id, @FirstName, @LastName, @ContactNumber, @Email, @Address)";
+                using (var command = new SQLiteCommand(query, connection, transaction))
+                {
+                    command.Parameters.AddWithValue("@Id", customer.Id);
+                    command.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                    command.Parameters.AddWithValue("@LastName", customer.LastName);
+                    command.Parameters.AddWithValue("@ContactNumber", customer.ContactNumber);
+                    command.Parameters.AddWithValue("@Email", customer.Email);
+                    command.Parameters.AddWithValue("@Address", customer.Address);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void ImportEmployees(List<Employee> employees, SQLiteConnection connection, SQLiteTransaction transaction)
+        {
+            if (employees == null) return;
+            foreach (var employee in employees)
+            {
+                string query = @"
+                    INSERT INTO Employees (Id, Login, Password, FirstName, LastName, ContactNumber, Position)
+                    VALUES (@Id, @Login, @Password, @FirstName, @LastName, @ContactNumber, @Position)";
+                using (var command = new SQLiteCommand(query, connection, transaction))
+                {
+                    command.Parameters.AddWithValue("@Id", employee.Id);
+                    command.Parameters.AddWithValue("@Login", employee.Login);
+                    command.Parameters.AddWithValue("@Password", employee.Password);
+                    command.Parameters.AddWithValue("@FirstName", employee.FirstName);
+                    command.Parameters.AddWithValue("@LastName", employee.LastName);
+                    command.Parameters.AddWithValue("@ContactNumber", employee.ContactNumber);
+                    command.Parameters.AddWithValue("@Position", employee.Position);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void ImportServices(List<Service> services, SQLiteConnection connection, SQLiteTransaction transaction)
+        {
+            if (services == null) return;
+            foreach (var service in services)
+            {
+                string query = @"
+                    INSERT INTO Services (Id, Name, Price)
+                    VALUES (@Id, @Name, @Price)";
+                using (var command = new SQLiteCommand(query, connection, transaction))
+                {
+                    command.Parameters.AddWithValue("@Id", service.Id);
+                    command.Parameters.AddWithValue("@Name", service.Name);
+                    command.Parameters.AddWithValue("@Price", service.Price);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void ImportOrders(List<Order> orders, SQLiteConnection connection, SQLiteTransaction transaction)
+        {
+            if (orders == null) return;
+            foreach (var order in orders)
+            {
+                string query = @"
+                    INSERT INTO Orders (Id, OrderDate, CustomerId, Status, ProblemDescription, 
+                        CompletionDate, EmployeeId, DeviceType, DeviceModel, DeviceSerialNumber, TotalCost)
+                    VALUES (@Id, @OrderDate, @CustomerId, @Status, @ProblemDescription, 
+                        @CompletionDate, @EmployeeId, @DeviceType, @DeviceModel, @DeviceSerialNumber, @TotalCost)";
+                using (var command = new SQLiteCommand(query, connection, transaction))
+                {
+                    command.Parameters.AddWithValue("@Id", order.Id);
+                    command.Parameters.AddWithValue("@OrderDate", order.OrderDate.ToString("yyyy-MM-dd HH:mm:ss"));
+                    command.Parameters.AddWithValue("@CustomerId", order.CustomerId);
+                    command.Parameters.AddWithValue("@Status", order.Status);
+                    command.Parameters.AddWithValue("@ProblemDescription", order.ProblemDescription ?? "");
+                    command.Parameters.AddWithValue("@CompletionDate", order.CompletionDate == default ? (object)DBNull.Value : order.CompletionDate.ToString("yyyy-MM-dd HH:mm:ss"));
+                    command.Parameters.AddWithValue("@EmployeeId", order.EmployeeId);
+                    command.Parameters.AddWithValue("@DeviceType", order.DeviceType ?? "");
+                    command.Parameters.AddWithValue("@DeviceModel", order.DeviceModel ?? "");
+                    command.Parameters.AddWithValue("@DeviceSerialNumber", order.DeviceSerialNumber ?? "");
+                    command.Parameters.AddWithValue("@TotalCost", order.TotalCost);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void ImportOrderDetails(List<OrderDetails> orderDetails, SQLiteConnection connection, SQLiteTransaction transaction)
+        {
+            if (orderDetails == null) return;
+            foreach (var detail in orderDetails)
+            {
+                string query = @"
+                    INSERT INTO OrderDetails (Id, OrderId, ServiceId, Quantity, TotalCost)
+                    VALUES (@Id, @OrderId, @ServiceId, @Quantity, @TotalCost)";
+                using (var command = new SQLiteCommand(query, connection, transaction))
+                {
+                    command.Parameters.AddWithValue("@Id", detail.Id);
+                    command.Parameters.AddWithValue("@OrderId", detail.OrderId);
+                    command.Parameters.AddWithValue("@ServiceId", detail.ServiceId);
+                    command.Parameters.AddWithValue("@Quantity", detail.Quantity);
+                    command.Parameters.AddWithValue("@TotalCost", detail.TotalCost);
                     command.ExecuteNonQuery();
                 }
             }

@@ -44,6 +44,9 @@
             this.DeleteEmployeeButton = new System.Windows.Forms.Button();
             this.EditEmployeeButton = new System.Windows.Forms.Button();
             this.AddEmployeeButton = new System.Windows.Forms.Button();
+            this.DatabaseTab = new System.Windows.Forms.TabPage();
+            this.exportButton = new System.Windows.Forms.Button();
+            this.importButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.CustomersTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CustomersDataGrid)).BeginInit();
@@ -51,6 +54,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ServicesDataGrid)).BeginInit();
             this.EmployeesTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EmployeesDataGrid)).BeginInit();
+            this.DatabaseTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -61,6 +65,7 @@
             this.tabControl1.Controls.Add(this.CustomersTab);
             this.tabControl1.Controls.Add(this.ServicesTab);
             this.tabControl1.Controls.Add(this.EmployeesTab);
+            this.tabControl1.Controls.Add(this.DatabaseTab);
             this.tabControl1.Location = new System.Drawing.Point(9, 9);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
             this.tabControl1.Name = "tabControl1";
@@ -295,6 +300,39 @@
             this.AddEmployeeButton.UseVisualStyleBackColor = true;
             this.AddEmployeeButton.Click += new System.EventHandler(this.AddEmployeeButton_Click);
             // 
+            // DatabaseTab
+            // 
+            this.DatabaseTab.Controls.Add(this.exportButton);
+            this.DatabaseTab.Controls.Add(this.importButton);
+            this.DatabaseTab.Location = new System.Drawing.Point(4, 22);
+            this.DatabaseTab.Name = "DatabaseTab";
+            this.DatabaseTab.Size = new System.Drawing.Size(768, 459);
+            this.DatabaseTab.TabIndex = 3;
+            this.DatabaseTab.Text = "База данных";
+            this.DatabaseTab.UseVisualStyleBackColor = true;
+            // 
+            // exportButton
+            // 
+            this.exportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.exportButton.Location = new System.Drawing.Point(137, 222);
+            this.exportButton.Name = "exportButton";
+            this.exportButton.Size = new System.Drawing.Size(488, 35);
+            this.exportButton.TabIndex = 3;
+            this.exportButton.Text = "Экспорт в JSON";
+            this.exportButton.UseVisualStyleBackColor = true;
+            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
+            // 
+            // importButton
+            // 
+            this.importButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.importButton.Location = new System.Drawing.Point(137, 181);
+            this.importButton.Name = "importButton";
+            this.importButton.Size = new System.Drawing.Size(488, 35);
+            this.importButton.TabIndex = 2;
+            this.importButton.Text = "Импорт из JSON";
+            this.importButton.UseVisualStyleBackColor = true;
+            this.importButton.Click += new System.EventHandler(this.importButton_Click);
+            // 
             // Admin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -313,6 +351,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ServicesDataGrid)).EndInit();
             this.EmployeesTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.EmployeesDataGrid)).EndInit();
+            this.DatabaseTab.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -335,5 +374,8 @@
         private System.Windows.Forms.DataGridView CustomersDataGrid;
         private System.Windows.Forms.DataGridView ServicesDataGrid;
         private System.Windows.Forms.DataGridView EmployeesDataGrid;
+        private System.Windows.Forms.TabPage DatabaseTab;
+        private System.Windows.Forms.Button exportButton;
+        private System.Windows.Forms.Button importButton;
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerPicker));
             this.customersDataGrid = new System.Windows.Forms.DataGridView();
             this.confirmButton = new System.Windows.Forms.Button();
             this.addCustomerButton = new System.Windows.Forms.Button();
@@ -60,6 +61,7 @@
             this.customersDataGrid.ShowEditingIcon = false;
             this.customersDataGrid.Size = new System.Drawing.Size(826, 425);
             this.customersDataGrid.TabIndex = 1;
+            this.customersDataGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.customersDataGrid_CellDoubleClick);
             // 
             // confirmButton
             // 
@@ -91,7 +93,7 @@
             // 
             this.searchTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.searchTextBox.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.searchTextBox.Location = new System.Drawing.Point(44, 441);
+            this.searchTextBox.Location = new System.Drawing.Point(37, 441);
             this.searchTextBox.Name = "searchTextBox";
             this.searchTextBox.Size = new System.Drawing.Size(259, 27);
             this.searchTextBox.TabIndex = 4;
@@ -100,9 +102,11 @@
             // pictureBox1
             // 
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pictureBox1.Location = new System.Drawing.Point(11, 441);
+            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Location = new System.Drawing.Point(11, 445);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(27, 27);
+            this.pictureBox1.Size = new System.Drawing.Size(20, 20);
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 

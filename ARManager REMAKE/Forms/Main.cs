@@ -20,6 +20,14 @@ namespace ARManager_REMAKE.Forms
         private void Main_Load(object sender, EventArgs e)
         {
             userNameToolStripMenuItem.Text = User?.Login ?? "Неизвестный пользователь";
+            if (User.Position == "Сотрудник")
+            {
+                adminToolStripMenuItem.Visible = false;
+                reportToolStripMenuItem.Visible = false;
+                historyToolStripMenuItem.Visible = false;
+                addOrderButton.Enabled = false;
+                closeOrderButton.Enabled = false;
+            }
             LoadOrders();
         }
 
@@ -40,18 +48,28 @@ namespace ARManager_REMAKE.Forms
             ordersDataGrid.Columns["Customer"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
-        private void LoadOrders()
+        private void LoadOrders(string searchQuery = "")
         {
             SetupOrdersDataGrid();
 
-            List<Order> orders = db.GetOrders(User);
+            List<Order> orders = db.GetOrders(User).Where(o => o.Status != "Закрыт").ToList();
+
+            // Фильтрация по поисковому запросу
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                searchQuery = searchQuery.ToLower();
+                orders = orders.Where(o =>
+                    o.Status.ToLower().Contains(searchQuery) ||
+                    o.OrderDate.ToString("dd.MM.yyyy").Contains(searchQuery) ||
+                    $"{o.CustomerFirstName} {o.CustomerLastName}".ToLower().Contains(searchQuery) ||
+                    (o.CompletionDate == default ? "Не завершено" : o.CompletionDate.ToString("dd.MM.yyyy")).ToLower().Contains(searchQuery) ||
+                    $"{o.EmployeeFirstName} {o.EmployeeLastName}".ToLower().Contains(searchQuery) ||
+                    o.TotalCost.ToString("0.00").Contains(searchQuery)
+                ).ToList();
+            }
 
             foreach (var order in orders)
             {
-                if (order.Status == "Закрыт")
-                {
-                    return;
-                }
                 ordersDataGrid.Rows.Add(
                     order.Id,
                     order.Status,
@@ -80,16 +98,17 @@ namespace ARManager_REMAKE.Forms
         {
             Admin adminForm = new Admin();
             adminForm.ShowDialog();
+            LoadOrders(searchTextBox.Text); // Сохранить текущий поиск при обновлении
         }
 
         private void addOrderButton_Click(object sender, EventArgs e)
         {
             AddForms.AddOrder form = new AddForms.AddOrder();
             form.ShowDialog();
-            LoadOrders();
+            LoadOrders(searchTextBox.Text); // Сохранить текущий поиск
         }
 
-        private void editOrderButton_Click(object sender, EventArgs e)
+        private void EditOrder()
         {
             if (ordersDataGrid.SelectedRows.Count == 0)
             {
@@ -113,7 +132,12 @@ namespace ARManager_REMAKE.Forms
 
             var editForm = new AddForms.AddOrder(order);
             editForm.ShowDialog();
-            LoadOrders();
+            LoadOrders(searchTextBox.Text); // Сохранить текущий поиск
+        }
+
+        private void editOrderButton_Click(object sender, EventArgs e)
+        {
+            EditOrder();
         }
 
         private void closeOrderButton_Click(object sender, EventArgs e)
@@ -142,12 +166,39 @@ namespace ARManager_REMAKE.Forms
             {
                 db.CloseOrder(orderId);
                 MessageBox.Show("Заказ успешно закрыт");
-                LoadOrders();
+                LoadOrders(searchTextBox.Text); // Сохранить текущий поиск
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при закрытии заказа: {ex.Message}");
             }
+        }
+
+        private void historyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OrderHistory form = new OrderHistory();
+            form.ShowDialog();
+        }
+
+        private void ordersDataGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            EditOrder();
+        }
+
+        private void searchTextBox_TextChanged(object sender, EventArgs e)
+        {
+            LoadOrders(searchTextBox.Text); // Перезагрузить заказы с учетом поискового запроса
+        }
+
+        private void reportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReportForm reportForm = new ReportForm(db, User);
+            reportForm.ShowDialog();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

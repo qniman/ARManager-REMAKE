@@ -18,6 +18,9 @@ namespace ARManager_REMAKE.Forms.AddForms
         private readonly Order existingOrder;
         private readonly bool isEditMode;
 
+        // Список возможных статусов
+        private readonly string[] orderStatuses = { "Создан", "В работе", "Выполнен" };
+
         public AddOrder(Order order = null)
         {
             InitializeComponent();
@@ -29,10 +32,14 @@ namespace ARManager_REMAKE.Forms.AddForms
         {
             SetupServicesDataGrid();
             SetupDeviceTypeComboBox();
+            SetupStatusComboBox();
+
             if (isEditMode)
             {
                 LoadOrderData();
+                confirmButton.Text = "Сохранить";
             }
+
             UpdateServicesDisplay();
             servicesDataGrid.CellValueChanged += servicesDataGrid_CellValueChanged;
         }
@@ -54,6 +61,25 @@ namespace ARManager_REMAKE.Forms.AddForms
         {
             deviceTypeComboBox.Items.AddRange(new[] { "Лаптоп", "Десктоп", "Планшет", "Смартфон" });
             deviceTypeComboBox.SelectedIndex = -1;
+        }
+
+        private void SetupStatusComboBox()
+        {
+            statusComboBox.DropDownStyle = ComboBoxStyle.DropDownList; // Только выбор
+            statusComboBox.Items.AddRange(orderStatuses); // Заполнить статусы
+
+            if (isEditMode)
+            {
+                // Найти индекс статуса заказа
+                int statusIndex = Array.IndexOf(orderStatuses, existingOrder.Status);
+                statusComboBox.SelectedIndex = statusIndex >= 0 ? statusIndex : 0; // Если статус не найден, выбрать первый
+                statusComboBox.Enabled = true; // Включить для редактирования
+            }
+            else
+            {
+                statusComboBox.SelectedIndex = 0; // "Создан" по умолчанию для нового заказа
+                statusComboBox.Enabled = false; // Отключить для нового заказа
+            }
         }
 
         private void LoadOrderData()
@@ -164,6 +190,11 @@ namespace ARManager_REMAKE.Forms.AddForms
                 MessageBox.Show("Укажите описание проблемы");
                 return;
             }
+            if (string.IsNullOrWhiteSpace(statusComboBox.Text))
+            {
+                MessageBox.Show("Выберите статус заказа");
+                return;
+            }
 
             var order = new Order
             {
@@ -171,7 +202,7 @@ namespace ARManager_REMAKE.Forms.AddForms
                 CustomerId = selectedCustomer.Id,
                 EmployeeId = selectedEmployee.Id,
                 OrderDate = isEditMode ? existingOrder.OrderDate : DateTime.Now,
-                Status = isEditMode ? existingOrder.Status : "Создан",
+                Status = statusComboBox.Text,
                 DeviceType = deviceTypeComboBox.Text,
                 DeviceModel = deviceModelTextBox.Text,
                 DeviceSerialNumber = deviceSerialNumberTextBox.Text,
@@ -185,12 +216,10 @@ namespace ARManager_REMAKE.Forms.AddForms
                 if (isEditMode)
                 {
                     db.UpdateOrder(order, selectedServices);
-                    MessageBox.Show("Заказ успешно обновлен");
                 }
                 else
                 {
                     db.SaveOrder(order, selectedServices);
-                    MessageBox.Show("Заказ успешно сохранен");
                 }
                 Close();
             }

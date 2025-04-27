@@ -54,7 +54,7 @@ namespace ARManager_REMAKE.Forms.PickerForms
             LoadCustomers();
         }
 
-        private void confirmButton_Click(object sender, EventArgs e)
+        private void SelectCustomer()
         {
             if (customersDataGrid.SelectedRows.Count == 0)
             {
@@ -64,6 +64,11 @@ namespace ARManager_REMAKE.Forms.PickerForms
             int customerId = (int)customersDataGrid.SelectedRows[0].Cells["Id"].Value;
             selectedCustomer = db.GetCustomerById(customerId);
             Close();
+        }
+
+        private void confirmButton_Click(object sender, EventArgs e)
+        {
+            SelectCustomer();
         }
 
         private void addCustomerButton_Click(object sender, EventArgs e)
@@ -93,6 +98,11 @@ namespace ARManager_REMAKE.Forms.PickerForms
 
                 LoadCustomers(filteredCustomers);
             }
+        }
+
+        private void customersDataGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SelectCustomer();
         }
     }
 }
