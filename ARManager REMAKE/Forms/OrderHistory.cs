@@ -2,17 +2,11 @@
 using ARManager_REMAKE.Classes.Database.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ARManager_REMAKE.Forms
 {
-    public partial class OrderHistory: Form
+    public partial class OrderHistory : Form
     {
         Database db = new Database();
         public OrderHistory()
@@ -42,7 +36,7 @@ namespace ARManager_REMAKE.Forms
         {
             SetupDataGrid();
 
-            List<Order> orders = db.GetOrders(null);    
+            List<Order> orders = db.GetOrders(null);
             foreach (Order order in orders)
             {
                 var customerFullname = order.CustomerFirstName + " " + order.CustomerLastName;

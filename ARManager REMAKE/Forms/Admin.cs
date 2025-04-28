@@ -254,8 +254,7 @@ namespace ARManager_REMAKE.Forms
                         db.ImportFromJson(openFileDialog.FileName);
                         MessageBox.Show("База данных успешно импортирована из JSON. Текущая сессия будет закрыта.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Перезапуск приложения
-                        System.Diagnostics.Process.Start(Application.ExecutablePath);
+                        Process.Start(Application.ExecutablePath);
                         Application.Exit();
                     }
                     catch (Exception ex)

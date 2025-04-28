@@ -18,7 +18,6 @@ namespace ARManager_REMAKE.Forms.AddForms
         private readonly Order existingOrder;
         private readonly bool isEditMode;
 
-        // Список возможных статусов
         private readonly string[] orderStatuses = { "Создан", "В работе", "Выполнен" };
 
         public AddOrder(Order order = null)
@@ -65,20 +64,19 @@ namespace ARManager_REMAKE.Forms.AddForms
 
         private void SetupStatusComboBox()
         {
-            statusComboBox.DropDownStyle = ComboBoxStyle.DropDownList; // Только выбор
-            statusComboBox.Items.AddRange(orderStatuses); // Заполнить статусы
+            statusComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            statusComboBox.Items.AddRange(orderStatuses);
 
             if (isEditMode)
             {
-                // Найти индекс статуса заказа
                 int statusIndex = Array.IndexOf(orderStatuses, existingOrder.Status);
-                statusComboBox.SelectedIndex = statusIndex >= 0 ? statusIndex : 0; // Если статус не найден, выбрать первый
-                statusComboBox.Enabled = true; // Включить для редактирования
+                statusComboBox.SelectedIndex = statusIndex >= 0 ? statusIndex : 0;
+                statusComboBox.Enabled = true;
             }
             else
             {
-                statusComboBox.SelectedIndex = 0; // "Создан" по умолчанию для нового заказа
-                statusComboBox.Enabled = false; // Отключить для нового заказа
+                statusComboBox.SelectedIndex = 0;
+                statusComboBox.Enabled = false;
             }
         }
 

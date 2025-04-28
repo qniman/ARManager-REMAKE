@@ -54,7 +54,6 @@ namespace ARManager_REMAKE.Forms
 
             List<Order> orders = db.GetOrders(User).Where(o => o.Status != "Закрыт").ToList();
 
-            // Фильтрация по поисковому запросу
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
                 searchQuery = searchQuery.ToLower();
@@ -98,14 +97,14 @@ namespace ARManager_REMAKE.Forms
         {
             Admin adminForm = new Admin();
             adminForm.ShowDialog();
-            LoadOrders(searchTextBox.Text); // Сохранить текущий поиск при обновлении
+            LoadOrders(searchTextBox.Text);
         }
 
         private void addOrderButton_Click(object sender, EventArgs e)
         {
             AddForms.AddOrder form = new AddForms.AddOrder();
             form.ShowDialog();
-            LoadOrders(searchTextBox.Text); // Сохранить текущий поиск
+            LoadOrders(searchTextBox.Text);
         }
 
         private void EditOrder()
@@ -132,7 +131,7 @@ namespace ARManager_REMAKE.Forms
 
             var editForm = new AddForms.AddOrder(order);
             editForm.ShowDialog();
-            LoadOrders(searchTextBox.Text); // Сохранить текущий поиск
+            LoadOrders(searchTextBox.Text);
         }
 
         private void editOrderButton_Click(object sender, EventArgs e)
@@ -166,7 +165,7 @@ namespace ARManager_REMAKE.Forms
             {
                 db.CloseOrder(orderId);
                 MessageBox.Show("Заказ успешно закрыт");
-                LoadOrders(searchTextBox.Text); // Сохранить текущий поиск
+                LoadOrders(searchTextBox.Text);
             }
             catch (Exception ex)
             {
@@ -187,7 +186,7 @@ namespace ARManager_REMAKE.Forms
 
         private void searchTextBox_TextChanged(object sender, EventArgs e)
         {
-            LoadOrders(searchTextBox.Text); // Перезагрузить заказы с учетом поискового запроса
+            LoadOrders(searchTextBox.Text);
         }
 
         private void reportToolStripMenuItem_Click(object sender, EventArgs e)

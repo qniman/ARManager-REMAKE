@@ -3,11 +3,9 @@ using ARManager_REMAKE.Classes.Database.Models;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -30,24 +28,20 @@ namespace ARManager_REMAKE.Forms
 
         private void InitializeControls()
         {
-            // Тип отчета
             reportTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             reportTypeComboBox.Items.AddRange(reportTypes);
             reportTypeComboBox.SelectedIndex = 0;
 
-            // Формат экспорта
             exportFormatComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             exportFormatComboBox.Items.AddRange(exportFormats);
             exportFormatComboBox.SelectedIndex = 0;
 
-            // Даты
             startDatePicker.Value = DateTime.Today.AddMonths(-1);
             endDatePicker.Value = DateTime.Today;
             startDatePicker.Enabled = false;
             endDatePicker.Enabled = false;
             useDateRangeCheckBox.Checked = false;
 
-            // Обработчики
             useDateRangeCheckBox.CheckedChanged += (s, e) =>
             {
                 startDatePicker.Enabled = useDateRangeCheckBox.Checked;
@@ -143,7 +137,7 @@ namespace ARManager_REMAKE.Forms
                     workbook.SaveAs(filePath);
                 }
             }
-            else // Word
+            else
             {
                 using (var doc = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
                 {
@@ -217,7 +211,7 @@ namespace ARManager_REMAKE.Forms
                     workbook.SaveAs(filePath);
                 }
             }
-            else // Word
+            else
             {
                 using (var doc = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
                 {
@@ -292,7 +286,7 @@ namespace ARManager_REMAKE.Forms
                     workbook.SaveAs(filePath);
                 }
             }
-            else // Word
+            else
             {
                 using (var doc = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
                 {
@@ -364,7 +358,7 @@ namespace ARManager_REMAKE.Forms
                     workbook.SaveAs(filePath);
                 }
             }
-            else // Word
+            else
             {
                 using (var doc = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
                 {
